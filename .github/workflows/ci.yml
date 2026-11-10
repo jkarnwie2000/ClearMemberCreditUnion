@@ -43,3 +43,55 @@ jobs:
         run: npm run build
         env:
           NEXT_TELEMETRY_DISABLED: 1
+
+  # Deploys to Vercel with the Vercel CLI after every successful push to main.
+  # Requires one repository secret: VERCEL_TOKEN. Without it, the deploy is skipped (not failed).
+  deploy:
+    name: Deploy to Vercel
+    needs: quality
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      # These identify the Vercel project and are not secret.
+      VERCEL_ORG_ID: team_jWdx9Hq2AqYveoM0tPDApCxq
+      VERCEL_PROJECT_ID: prj_DzAEPq1f6BxHMHFItlGrdoyKnrOE
+      VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+
+    steps:
+      - name: Check for Vercel token
+        id: token
+        run: |
+          if [ -z "$VERCEL_TOKEN" ]; then
+            echo "::notice::VERCEL_TOKEN secret is not set, so the deploy was skipped. Add it under Settings > Secrets and variables > Actions."
+            echo "present=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "present=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Check out repository
+        if: steps.token.outputs.present == 'true'
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js 20
+        if: steps.token.outputs.present == 'true'
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install Vercel CLI
+        if: steps.token.outputs.present == 'true'
+        run: npm install --global vercel@65.11.0
+
+      - name: Pull Vercel project settings
+        if: steps.token.outputs.present == 'true'
+        run: vercel pull --yes --environment=production --token="$VERCEL_TOKEN"
+
+      - name: Build with Vercel
+        if: steps.token.outputs.present == 'true'
+        run: vercel build --prod --token="$VERCEL_TOKEN"
+
+      - name: Deploy to production
+        if: steps.token.outputs.present == 'true'
+        run: vercel deploy --prebuilt --prod --token="$VERCEL_TOKEN"

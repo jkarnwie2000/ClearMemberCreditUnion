@@ -294,6 +294,8 @@ The Overview, Accounts, Support Requests, Settings, and all 21 Help articles are
 6. **Run Vitest:** `npm run test`
 7. **Build for production:** `npm run build`
 
+A second job, **Deploy to Vercel**, runs only after those checks pass on a push to `main`. It builds and deploys with the Vercel CLI (`vercel pull` → `vercel build --prod` → `vercel deploy --prebuilt --prod`). It needs one repository secret, `VERCEL_TOKEN`. Without it, the deploy is skipped rather than failed.
+
 Any failing step fails the workflow. Every step runs a real command; none are placeholders. The same commands pass locally, and `package-lock.json` includes the Linux native binaries (Next SWC, Tailwind oxide, lightningcss) that the Ubuntu runner needs.
 
 ## Lighthouse audit results
