@@ -1,0 +1,127 @@
+@import "tailwindcss";
+
+/*
+ * ClearMember design tokens.
+ * Text variants (e.g. success-text, warning-text) are darker shades of the
+ * brand palette, chosen so text meets WCAG AA contrast (4.5:1) on both white
+ * and tinted backgrounds. The brighter base colors are used for icons,
+ * borders, and fills.
+ */
+@theme {
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+
+  --color-navy: #0a1a33;
+  --color-navy-700: #12284a;
+  --color-navy-600: #1b3762;
+
+  --color-brand: #1f5fd6;
+  --color-brand-dark: #1748b0;
+  --color-brand-50: #dfeafe;
+  --color-brand-100: #c4d8fc;
+
+  --color-teal: #0ea597;
+  --color-teal-text: #0a6f68;
+  --color-teal-50: #dcf5f2;
+  /* Bright accent for use on the dark navy sidebar only. */
+  --color-accent-on-dark: #5eead4;
+
+  --color-canvas: #f1f4f9;
+  --color-ink: #0f172a;
+  --color-muted: #475569;
+  --color-line: #d3dbe6;
+  /* Form control borders meet the 3:1 non-text contrast requirement (WCAG 1.4.11). */
+  --color-line-strong: #7b8798;
+
+  --color-success: #12b76a;
+  --color-success-text: #0a7a43;
+  --color-success-50: #d9f5e6;
+
+  --color-warning: #f59e0b;
+  --color-warning-text: #8a4b00;
+  --color-warning-50: #fdedc8;
+
+  --color-error: #e5383b;
+  --color-error-text: #b42318;
+  --color-error-50: #fde2e1;
+
+  --shadow-card: 0 1px 2px rgb(10 26 51 / 0.06), 0 2px 6px rgb(10 26 51 / 0.07);
+  --shadow-raised: 0 10px 28px rgb(10 26 51 / 0.16), 0 2px 6px rgb(10 26 51 / 0.1);
+}
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    background-color: var(--color-canvas);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  :focus-visible {
+    outline: 3px solid var(--color-brand);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+
+  /* Dark surfaces (sidebar) need a light focus ring to stay visible. */
+  .focus-on-dark :focus-visible {
+    outline-color: #ffffff;
+  }
+
+  ::selection {
+    background-color: var(--color-brand-100);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+@layer components {
+  .card {
+    background-color: #ffffff;
+    border: 1px solid var(--color-line);
+    border-radius: 1rem;
+    box-shadow: var(--shadow-card);
+  }
+
+  .input {
+    display: block;
+    width: 100%;
+    min-height: 2.75rem;
+    border-radius: 0.625rem;
+    border: 1px solid var(--color-line-strong);
+    background-color: #ffffff;
+    padding: 0.5rem 0.75rem;
+    font-size: 0.9375rem;
+    color: var(--color-ink);
+  }
+
+  .input::placeholder {
+    color: #64748b;
+  }
+
+  .input:focus-visible {
+    outline: 3px solid var(--color-brand);
+    outline-offset: 1px;
+    border-color: var(--color-brand);
+  }
+
+  .input[aria-invalid="true"] {
+    border-color: var(--color-error);
+    border-width: 2px;
+  }
+
+  .tabular {
+    font-variant-numeric: tabular-nums;
+  }
+}
