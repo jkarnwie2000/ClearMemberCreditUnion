@@ -2,7 +2,7 @@
 
 **All financial data in this project are synthetic.** See the [disclaimer](#disclaimer).
 
-## Do not just display banking information. Explain it.
+## Do not just display banking information: Explain it.
 
 A member-centered digital banking dashboard for a fictional credit union. Members can search and filter their activity, and every transaction comes with a plain-language explanation. The app also includes a searchable Help Center and an accessible four-step support request that saves drafts automatically.
 
@@ -51,7 +51,7 @@ A member-centered digital banking dashboard for a fictional credit union. Member
 
 A Next.js banking dashboard that explains every transaction in plain language.
 
-## Summarist Book Summary Run Instructions
+## Clear Member Credit Union Run Instructions
 
 ## Table of contents
 
