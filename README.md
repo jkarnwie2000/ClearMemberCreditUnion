@@ -53,6 +53,8 @@ A Next.js banking dashboard that explains every transaction in plain language.
 
 ## Clear Member Credit Union Run Instructions
 
+## 🚀 Getting Started
+
 ## Table of contents
 
 1. [Project overview](#project-overview)
