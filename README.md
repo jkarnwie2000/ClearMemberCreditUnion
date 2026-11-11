@@ -126,7 +126,7 @@ Two rules shaped all of the explanation copy:
 1. **Never claim certainty the data doesn't support.** Explanations use "may," "often," and "commonly," and say things like "We can't confirm the exact reason from this screen."
 2. **Always end with a next step.** Every explanation answers *What happened? Why might this have happened? What does this mean for your account? What should you do next?*
 
-## Key features
+## Key features explained:
 
 ### 🏠 Account overview
 - 👋 Welcome section with the current date (from the visitor's browser) and a notification indicator.
