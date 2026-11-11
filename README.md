@@ -26,6 +26,7 @@ A member-centered digital banking dashboard for a fictional credit union. Member
 * Vercel: automated production deployment
 * Lighthouse + axe-core: performance and accessibility audits
 
+## Clear Member Credit Union
 
 🔗 **Live Demo:** [View Live Website](https://clearmember-credit-union.vercel.app)
 
