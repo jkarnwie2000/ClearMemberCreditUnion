@@ -188,7 +188,7 @@ A pure, unit-tested explanation engine in [`lib/transaction-explanations.ts`](li
 - ⏭️ A skip link for keyboard users.
 - 🚧 A custom 404 page and an error page.
 
-## Technology stack
+## Technology stack breakdown:
 
 | Concern | Choice |
 | --- | --- |
