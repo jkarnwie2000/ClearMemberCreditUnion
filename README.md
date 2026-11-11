@@ -1,6 +1,6 @@
 # Clear Member Credit Union – Member Banking Dashboard
 
-**All financial data in this project is synthetic.** See the [disclaimer](#disclaimer).
+**All financial data in this project are synthetic.** See the [disclaimer](#disclaimer).
 
 ## Don't just display banking information. Explain it.
 
@@ -30,7 +30,7 @@ A member-centered digital banking dashboard for a fictional credit union. Member
 
 🔗 **Live Demo:** [View Live Website](https://clearmember-credit-union.vercel.app)
 
-
+A Next.js banking dashboard that explains every transaction in plain language.
 
 
 ---
