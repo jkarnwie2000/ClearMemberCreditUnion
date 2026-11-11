@@ -6,7 +6,7 @@
 
 A member-centered digital banking dashboard for a fictional credit union. Members can search and filter their activity, and every transaction comes with a plain-language explanation. The app also includes a searchable Help Center and an accessible four-step support request that saves drafts automatically.
 
-## Clear Member Credit Union Screenshot
+## Clear Member Credit Union Overview Tab Screenshot
 
 ![Clear Member Credit Union Screenshot](docs/screenshots/overview-desktop.png)
 
@@ -203,7 +203,7 @@ A pure, unit-tested explanation engine in [`lib/transaction-explanations.ts`](li
 | Persistence | `localStorage` (drafts and alert preferences only) |
 | CI | GitHub Actions |
 
-## Screenshots
+## Additional Screenshots
 
 All screenshots were captured from the production build with headless Chrome.
 
