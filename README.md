@@ -11,6 +11,7 @@ A member-centered digital banking dashboard for a fictional credit union. Member
 ![Clear Member Credit Union Screenshot](docs/screenshots/overview-desktop.png)
 
 
+
 ## 🛠️ Tech Stack
 
 * Next.js 16: App Router, React 19
@@ -25,6 +26,29 @@ A member-centered digital banking dashboard for a fictional credit union. Member
 * GitHub Actions: CI for lint, tests, build
 * Vercel: automated production deployment
 * Lighthouse + axe-core: performance and accessibility audits
+
+### 🚀 Key Features
+
+ Written for: visitors to your GitHub profile, as a short feature list under the pinned project.
+
+**Key features**
+
+- 💡 **Plain-language transaction explanations:** what happened, why, and what to do next
+- ⚖️ **Balance breakdown:** shows exactly why available and current balances differ
+- 🔍 **Smart transaction search:** by merchant, amount, category, or reference
+- 🎛️ **Combinable filters:** account, date, status, type, category, and amount
+- ⛽ **Hold explanations:** gas stations, hotels, restaurants, and rental cars
+- 🔁 **Transfer tracking:** a stage-by-stage timeline that never promises delivery dates
+- 💸 **Fee explanations:** overdraft, ATM, maintenance, and returned payment fees
+- ❓ **Unfamiliar merchant guidance:** decodes confusing statement names, with safe-contact tips
+- 📚 **Searchable Help Center:** 21 articles that understand natural-language questions
+- 📝 **Accessible four-step support form:** validated with React Hook Form and Zod
+- 🛡️ **Sensitive data protection:** blocks full card numbers, passwords, and PINs
+- 💾 **Autosaved drafts:** restores your progress, even after closing the browser
+- ♿ **Accessibility first:** 0 axe violations, Lighthouse Accessibility 100
+- ✅ **83 automated tests:** Vitest and React Testing Library
+- 🚀 **CI/CD:** GitHub Actions tests every push, then deploys to Vercel
+- 🧪 **100% synthetic data:** no real accounts or banking connections
 
 ## Clear Member Credit Union
 
