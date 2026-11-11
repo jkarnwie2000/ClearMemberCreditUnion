@@ -8,7 +8,9 @@ A member-centered digital banking dashboard for a fictional credit union. Member
 
 ![Clear Member Credit Union Screenshot](docs/screenshots/overview-desktop.png)
 
+
 🔗 **Live Demo:** [View Live Website](https://clearmember-credit-union.vercel.app)
+
 
 **All financial data in this project is synthetic.** See the [disclaimer](#disclaimer).
 
