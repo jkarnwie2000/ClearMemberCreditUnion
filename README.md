@@ -85,60 +85,65 @@ Two rules shaped all of the explanation copy:
 
 ## Key features
 
-### Account overview
-- Welcome section with the current date (from the visitor's browser) and a notification indicator.
-- Three synthetic accounts: Everyday Checking (\*\*\*\*4821), High-Yield Savings (\*\*\*\*1904), and Holiday Savings (\*\*\*\*7732).
-- A "What's the difference?" disclosure explaining current versus available balance. It lists the four pending items (two holds, a pending restaurant charge, and an online order) that add up to exactly the $300.00 difference.
-- Recent activity with category icons, status badges (icon plus text, never color alone), signed amounts, and screen-reader text for money in and money out.
+### 🏠 Account overview
+- 👋 Welcome section with the current date (from the visitor's browser) and a notification indicator.
+- 🏦 Three synthetic accounts: Everyday Checking (\*\*\*\*4821), High-Yield Savings (\*\*\*\*1904), and Holiday Savings (\*\*\*\*7732).
+- ⚖️ A "What's the difference?" disclosure explaining current versus available balance. It lists the four pending items (two holds, a pending restaurant charge, and an online order) that add up to exactly the $300.00 difference.
+- 🧾 Recent activity with category icons, status badges (icon plus text, never color alone), signed amounts, and screen-reader text for money in and money out.
 
-### Transaction search and filtering
-- **Search** by merchant, descriptor, description, category, reference number, or amount (`86.43`, `$212.45`). Every word in a query must match.
-- **Filters:** account, date range, status (Posted, Pending, Processing, Reversed), type (Deposits, Withdrawals, Purchases, Transfers, Fees), category, and amount range. All filters combine.
-- Result count announced to screen readers, removable filter chips, **Clear all filters**, a range validation message, and an empty state with recovery actions.
-- **Sorting:** newest, oldest, highest amount, and lowest amount.
-- Deep links such as `/activity?status=pending` or `/activity?txn=txn-1018`, used by notifications, articles, and support history.
+### 🔍 Transaction search and filtering
+- 🔎 **Search** by merchant, descriptor, description, category, reference number, or amount (`86.43`, `$212.45`). Every word in a query must match.
+- 🎛️ **Filters:** account, date range, status (Posted, Pending, Processing, Reversed), type (Deposits, Withdrawals, Purchases, Transfers, Fees), category, and amount range. All filters combine.
+- 🔢 Result count announced to screen readers, removable filter chips, **Clear all filters**, a range validation message, and an empty state with recovery actions.
+- ↕️ **Sorting:** newest, oldest, highest amount, and lowest amount.
+- 🔗 Deep links such as `/activity?status=pending` or `/activity?txn=txn-1018`, used by notifications, articles, and support history.
 
-### Interactive transaction explanations (signature feature)
+### 💡 Interactive transaction explanations (signature feature)
 A pure, unit-tested explanation engine in [`lib/transaction-explanations.ts`](lib/transaction-explanations.ts) chooses a scenario from the transaction's data:
 
 | Scenario | Example in the demo data |
 | --- | --- |
-| Pending authorization | ShopNest Online, $8.00 |
-| Authorization holds: fuel, hotel, restaurant, rental car (active or released) | QuickFuel $100 hold, Harborview Inn $150 hold, Swiftway released $350 hold → $212.45 final |
-| Transfers: internal and external, with Initiated, Processing, Completed, and Delayed stages | Summit Federal transfer (Delayed) with a full timeline |
-| Fees: monthly maintenance, overdraft, ATM, and returned payment | Each linked to its related transaction |
-| Unfamiliar merchant descriptors: processor, parent company, shortened name, billing location | `CPX*MRNGSDE CAFE`, `BLUEHARBOR HOLDINGS LLC` |
-| Reversed transactions, deposits and dividends, and posted purchases | Peakwear (canceled), payroll, dividends |
+| ⏳ Pending authorization | ShopNest Online, $8.00 |
+| ⛽ Authorization holds: fuel, hotel, restaurant, rental car (active or released) | QuickFuel $100 hold, Harborview Inn $150 hold, Swiftway released $350 hold → $212.45 final |
+| 🔁 Transfers: internal and external, with Initiated, Processing, Completed, and Delayed stages | Summit Federal transfer (Delayed) with a full timeline |
+| 💸 Fees: monthly maintenance, overdraft, ATM, and returned payment | Each linked to its related transaction |
+| ❓ Unfamiliar merchant descriptors: processor, parent company, shortened name, billing location | `CPX*MRNGSDE CAFE`, `BLUEHARBOR HOLDINGS LLC` |
+| ↩️ Reversed transactions, deposits and dividends, and posted purchases | Peakwear (canceled), payroll, dividends |
 
-The detail panel is an accessible dialog: it traps focus, closes with Escape, and returns focus to the row that opened it. It shows every transaction field, the four-part explanation, a safety note for possibly unauthorized activity, related transactions, related Help Center articles, and three actions: **View related transactions**, **Visit the Help Center**, and **Submit a support request**. The last one pre-fills the form with the topic, account, and transaction.
+🪟 The detail panel is an accessible dialog: it traps focus, closes with Escape, and returns focus to the row that opened it. It shows every transaction field, the four-part explanation, a safety note for possibly unauthorized activity, related transactions, related Help Center articles, and three actions: **View related transactions**, **Visit the Help Center**, and **Submit a support request**. The last one pre-fills the form with the topic, account, and transaction.
 
-### Searchable Help Center
-- 21 articles across Account Management, Debit Cards, Transfers and Payments, Fees and Charges, and Security.
-- Ranked keyword search that ignores filler words ("why is my transfer late" finds *Why an external transfer may be delayed*) and handles simple plurals and past tense.
-- Category filters, suggested searches, and an empty state that offers a support request.
-- Each article has a summary, a plain-language body, next steps, related articles, a link into the member's own matching transactions, and a pre-filled support request link.
+### 📚 Searchable Help Center
+- 📖 21 articles across Account Management, Debit Cards, Transfers and Payments, Fees and Charges, and Security.
+- 🧠 Ranked keyword search that ignores filler words ("why is my transfer late" finds *Why an external transfer may be delayed*) and handles simple plurals and past tense.
+- 🏷️ Category filters, suggested searches, and an empty state that offers a support request.
+- 🧭 Each article has a summary, a plain-language body, next steps, related articles, a link into the member's own matching transactions, and a pre-filled support request link.
 
-### Accessible four-step support request
-1. **Topic:** eight topics, shown as radio cards.
-2. **Details:** subject, description (with a character count), account, and an optional transaction picker built from the synthetic activity. Validation **rejects anything that looks like a full card or account number, password, or PIN**.
-3. **Contact preferences:** secure message, email, or phone, with conditional validation, plus a preferred time.
-4. **Review and submit:** every answer, with an *Edit* button for each section.
+### 📝 Accessible four-step support request
+1. 🗂️ **Topic:** eight topics, shown as radio cards.
+2. ✍️ **Details:** subject, description (with a character count), account, and an optional transaction picker built from the synthetic activity. Validation **rejects anything that looks like a full card or account number, password, or PIN**.
+3. 📞 **Contact preferences:** secure message, email, or phone, with conditional validation, plus a preferred time.
+4. ✅ **Review and submit:** every answer, with an *Edit* button for each section.
 
-Accessibility details: a visible label and a "(required)" or "(optional)" marker on every field, errors linked with `aria-describedby` and `aria-invalid`, an error summary that receives focus and links to each field, focus moving to the step heading on navigation, a progress indicator with `aria-current="step"`, and error icons with "Error:" prefixes so meaning never depends on color.
+♿ Accessibility details: a visible label and a "(required)" or "(optional)" marker on every field, errors linked with `aria-describedby` and `aria-invalid`, an error summary that receives focus and links to each field, focus moving to the step heading on navigation, a progress indicator with `aria-current="step"`, and error icons with "Error:" prefixes so meaning never depends on color.
 
-On submit, the form generates a synthetic reference number (`CM-SR-YYYYMMDD-NNNN`) and clearly states that **no ticket was transmitted**.
+🎫 On submit, the form generates a synthetic reference number (`CM-SR-YYYYMMDD-NNNN`) and clearly states that **no ticket was transmitted**.
 
-### Local draft saving
+### 💾 Local draft saving
 [`hooks/useLocalDraft.ts`](hooks/useLocalDraft.ts) provides:
-- Autosave debounced to 800 ms, plus an immediate save when the member changes steps or presses **Save draft**.
-- Restoring values *and the current step* on return, with a visible "Draft saved at 3:42 PM" status.
-- A **Discard draft** action with a confirmation step.
-- A versioned storage envelope. Corrupted JSON, unexpected shapes (validated with Zod), outdated versions, and blocked storage are detected, removed, and explained to the member without crashing.
-- Clearing the draft after a successful submission.
-- A plain note that drafts are stored only in this browser.
+- ⏱️ Autosave debounced to 800 ms, plus an immediate save when the member changes steps or presses **Save draft**.
+- 🔄 Restoring values *and the current step* on return, with a visible "Draft saved at 3:42 PM" status.
+- 🗑️ A **Discard draft** action with a confirmation step.
+- 🛡️ A versioned storage envelope. Corrupted JSON, unexpected shapes (validated with Zod), outdated versions, and blocked storage are detected, removed, and explained to the member without crashing.
+- 🧹 Clearing the draft after a successful submission.
+- 🖥️ A plain note that drafts are stored only in this browser.
 
-### Also included
-A notification panel (mark read, mark all read), a support request history with demo records (Submitted, In Review, Resolved), Settings with alert toggles and a "clear demo data from this browser" control, responsive desktop and mobile navigation, a skip link, a custom 404 page, and an error page.
+### ➕ Also included
+- 🔔 A notification panel (mark read, mark all read).
+- 📋 A support request history with demo records (Submitted, In Review, Resolved).
+- ⚙️ Settings with alert toggles and a "clear demo data from this browser" control.
+- 📱 Responsive desktop and mobile navigation.
+- ⏭️ A skip link for keyboard users.
+- 🚧 A custom 404 page and an error page.
 
 ## Technology stack
 
