@@ -248,21 +248,160 @@ Open <http://localhost:3000>. Useful deep links:
 
 ## Testing
 
+ClearMember is tested in two layers that run together in one command:
+
+- **Vitest unit tests** check the business logic in `lib/` directly: search, filtering, sorting, the transaction explanation engine, Help Center ranking, and draft storage. These are fast, pure-function tests with no UI.
+- **React Testing Library (RTL) behavior tests** render real components in a simulated browser (jsdom) and use them the way a member would: typing, clicking, choosing options, and pressing keys with `@testing-library/user-event`. They check what the member sees and hears (text, roles, accessible names and descriptions, focus), not implementation details.
+
+### Latest test run
+
+| | |
+| --- | --- |
+| **Result** | ✅ **83 of 83 tests passed** in **7 of 7 files**, with 0 failures and 0 skipped |
+| **Date** | November 10, 2026 |
+| **Command** | `npx vitest run --reporter=verbose` |
+| **Environment** | Windows 11, Node.js 20.20.2, Vitest 4.1.12, jsdom 29.1.1 |
+| **Duration** | About 47 seconds locally; most of this is starting jsdom for each file. The tests themselves take about 21 seconds. |
+| **In CI** | The same suite runs on every push and pull request in the **ClearMember CI** GitHub Actions workflow (Ubuntu, Node.js 20). A failing test blocks the Vercel deployment. |
+
+| Layer | Where the tests live | Tests |
+| --- | --- | :-: |
+| React Testing Library behavior tests | The 5 files in `tests/features/` | 49 |
+| Vitest unit tests (pure logic) | The 2 files in `tests/lib/`, plus the `searchArticles` and `readDraft` groups inside two feature files | 34 |
+| **Total** | **7 files** | **83** |
+
+### Running the tests
+
 ```bash
-npm run test         # run once (used by CI)
-npm run test:watch   # watch mode
+npm run test                                             # run everything once (what CI runs)
+npm run test:watch                                       # re-run affected tests as you edit
+npx vitest run --reporter=verbose                        # list every test name and its result
+npx vitest run tests/features/support-request.test.tsx   # run one file
+npx vitest run -t "pending"                              # run tests whose names match "pending"
 ```
 
-The suite has **83 tests in 7 files**, and all pass. The tests drive the UI the way a member would, using `@testing-library/user-event`:
+### Testing tools
 
-| Area | Covered behavior |
+| Package | Version | Role |
+| --- | --- | --- |
+| [Vitest](https://vitest.dev/) | 4.1.12 | Test runner, assertions, and mocks |
+| [@testing-library/react](https://testing-library.com/docs/react-testing-library/intro/) | 16.3.3 | Renders React components and queries them like a user would |
+| [@testing-library/user-event](https://testing-library.com/docs/user-event/intro) | 14.6.9 | Realistic typing, clicking, selecting, and keyboard input |
+| [@testing-library/jest-dom](https://github.com/testing-library/jest-dom) | 6.9.1 | Readable DOM matchers such as `toHaveFocus`, `toHaveAccessibleDescription`, and `toBeChecked` |
+| [@testing-library/dom](https://testing-library.com/docs/dom-testing-library/intro) | 10.4.2 | Query engine used by RTL |
+| [jsdom](https://github.com/jsdom/jsdom) | 29.1.1 | Simulated browser environment, including `localStorage` |
+| [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react) | 6.3.0 | Compiles TSX for Vitest |
+
+### Configuration
+
+- **[`vitest.config.mts`](vitest.config.mts)** sets the jsdom environment, the `@/` import alias (matching `tsconfig.json`), and the setup file. It runs every file matching `tests/**/*.test.{ts,tsx}`.
+- **[`tests/setup.ts`](tests/setup.ts)** does three things:
+  - Loads the jest-dom matchers.
+  - Mocks `next/navigation` (`usePathname`, `useRouter`, `useSearchParams`), so components can render outside a running Next.js app.
+  - After every test, unmounts components, clears `localStorage`, and resets the page scroll lock, so no test depends on another.
+
+### How the tests are written
+
+- **Find elements the way assistive technology does.** Queries use roles and accessible names (`getByRole("dialog", { name: "Harborview Inn" })`) and labels (`getByLabelText(/^Subject/)`), not CSS classes. If a test can find an element, a screen reader user can too. The only test ID marks the generated reference number.
+- **Check accessibility behavior directly.** Tests assert focus movement (`toHaveFocus`), error messages linked to their inputs (`toHaveAccessibleDescription`), `aria-invalid`, `aria-pressed`, and `aria-current="step"`.
+- **Use the real synthetic data.** Tests run against the same data files the app uses, so a data change that breaks an explanation or a balance total fails the suite.
+- **Test behavior, not rendering.** No snapshot tests. Each test performs an action and checks the result a member would notice.
+
+### What each test file covers
+
+#### React Testing Library behavior tests
+
+**[`tests/features/transaction-activity.test.tsx`](tests/features/transaction-activity.test.tsx): Account Activity (10 tests)**
+
+| Test | What it proves |
 | --- | --- |
-| Transaction activity | Search by merchant; filter by status; combining account, type, amount, and search; clearing all filters; empty state and recovery; range validation; sorting; opening details, Escape to close, and focus restoration; following related transactions |
-| Transaction explanations | The four-question structure; pending; fuel, hotel, restaurant, and released rental-car holds; delayed external and completed internal transfers; all four fee types; unfamiliar merchant guidance with the safety note; contextual action links |
-| Help Center | Keyword search, natural-language questions, empty state with recovery, category filtering combined with search, suggested searches |
-| Support request | Blocking progress on invalid input, the error summary receiving focus and linking to fields, field-level messages via `aria-describedby`, rejecting full card numbers, conditional email validation, going back without losing answers, editing from review, submitting, the confirmation and reference number, pre-filling from a transaction |
-| Local drafts | Debounced autosave, manual save, restoring values and step, corrupted JSON, invalid shapes, outdated versions, discard with confirmation, clearing after submission, sending an incomplete restored draft back to the right step, storage that throws |
-| Business logic | Search by amount and reference, filter combinations, sort order, synthetic-data integrity (pending items equal the balance difference, unique IDs, valid related links), explanations never promising processing times |
+| Shows every transaction with a result count by default | All 37 transactions render, and "Showing 37 of 37 transactions" appears |
+| Searches transactions by merchant name as the member types | Typing "FreshMart" narrows the list to the 2 FreshMart rows, and the count updates |
+| Filters by transaction status | Choosing **Pending** leaves exactly the 4 pending items, each labeled Pending |
+| Combines multiple filters with a search | Account + Type + Minimum amount + search narrow 37 → 4 → 2 → 1 (the overdraft fee), and a removable "Type: Fees" chip appears |
+| Clears all filters and the search at once | **Clear all filters** restores every row and resets the search box and dropdowns |
+| Shows a helpful message when nothing matches, and recovers | A search with no matches shows a "No transactions match …" heading, and **Clear search** brings the results back |
+| Warns when the amount range is impossible | A minimum above the maximum shows an alert explaining the problem |
+| Sorts by highest amount | The largest transaction (payroll) moves to the top |
+| Opens transaction details with an explanation, then closes with Escape and restores focus | Clicking a row opens a dialog with "Understanding This Transaction", the reference, "Not posted", and a pre-filled support link. **Escape** closes it, and focus returns to the row |
+| Opens a transaction from the URL and navigates to related transactions | A deep link opens the overdraft fee, and clicking its related payment switches the dialog to Northwind Utilities |
+
+**[`tests/features/transaction-explanations.test.tsx`](tests/features/transaction-explanations.test.tsx): Understanding This Transaction (14 tests)**
+
+| Test | What it proves |
+| --- | --- |
+| Always follows the four-question structure | Headings for *What happened? / Why might this have happened? / What does this mean for your account? / What should you do next?* |
+| Explains pending transactions | Says the item isn't final, that the final amount may differ, that the available balance is reduced, and that it can drop off |
+| Explains a gas station authorization hold | Identifies a fuel hold, explains pump pre-authorization, says the final amount may be lower or higher than $100.00, and shows the authorized hold amount |
+| Explains hotel holds in plain language | Describes the check-in hold for room and incidentals |
+| Explains restaurant holds that may change when a tip is added | Explains the bill-before-tip authorization |
+| Explains a released rental car hold and points to the final charge | Says the hold was released and links the $212.45 final charge |
+| Explains a delayed external transfer without promising a date | Explains external transfers and weekends or holidays, admits the cause can't be determined, and shows a timeline that says "we won't guess" a date |
+| Explains an internal transfer and links its matching entry | Links the matching entry in the other account |
+| Explains fees (4 tests) | Overdraft, ATM, monthly maintenance (citing the demo waiver terms), and returned payment fees each get the correct plain-language explanation |
+| Gives guidance for unfamiliar merchant descriptors and safe contact advice | Explains payment-processor descriptors, names the possible business only as "not a confirmation", and shows a verified-channel safety note |
+| Offers contextual actions and related Help Center articles | Links for **View related transactions**, **Visit the Help Center**, and the specific related article |
+
+**[`tests/features/help-center.test.tsx`](tests/features/help-center.test.tsx): Help Center (6 RTL tests + 2 unit tests)**
+
+| Test | What it proves |
+| --- | --- |
+| Lists every article by category before searching | 21 articles appear under the five category headings |
+| Returns relevant articles for a keyword search | "overdraft" ranks *Understanding overdraft fees* first and announces the result count |
+| Understands a natural-language question | "why is my transfer late" ranks *Why an external transfer may be delayed* first |
+| Shows an empty state with a way forward when nothing matches | An empty-state message and a support request link appear, and **Clear search** restores the list |
+| Filters by category and combines with search | The **Security** filter is pressed (`aria-pressed`), shows 4 articles, and combines with a search |
+| Applies suggested searches | Clicking the "hold" suggestion fills the search box and finds the holds article |
+| `searchArticles` (unit): matches plural and past-tense variants | "declined" and "ATM fees" find the right articles |
+| `searchArticles` (unit): ignores filler words | A blank query, or one with only filler words, returns every article |
+
+**[`tests/features/support-request.test.tsx`](tests/features/support-request.test.tsx): Four-step support request (10 tests)**
+
+| Test | What it proves |
+| --- | --- |
+| Starts on step 1 with an accessible progress indicator | "Step 1 of 4", a progress list announcing the current step, and 8 topic options |
+| Prevents moving on until a topic is chosen and explains why | **Continue** stays on step 1, and an error summary appears, receives focus, and links to the field |
+| Advances through the steps when the information is valid | Topic → Details → Contact → Review, with focus moving to each new step heading |
+| Shows field-level validation messages linked to their inputs | 3 problems are listed. Each field gets `aria-invalid` and its message as its accessible description |
+| Rejects full card or account numbers in the description | A 16-digit card number is blocked with a security message |
+| Requires a valid email when email is the response method | An invalid email is rejected and a valid one is accepted |
+| Navigates backward without losing answers | **Back** keeps the selected topic and the typed subject |
+| Lets the member edit a section from the review step | **Edit details** returns to step 2, and the change appears on review |
+| Submits a valid request and shows a demonstration confirmation | The confirmation heading receives focus, the reference number matches `CM-SR-YYYYMMDD-NNNN`, the "not transmitted" notice appears, the draft is cleared, and **Start another request** resets the form |
+| Pre-fills the topic and transaction when opened from a transaction | The topic, account, and transaction come from the link |
+
+**[`tests/features/local-draft.test.tsx`](tests/features/local-draft.test.tsx): Draft saving (9 RTL tests + 4 unit tests)**
+
+| Test | What it proves |
+| --- | --- |
+| Automatically saves progress to localStorage after the member stops typing | After the debounce, the versioned draft holds the topic, subject, and current step, and "Draft saved at …" appears |
+| Saves immediately with the Save draft button | Manual save writes right away |
+| Restores previously entered information and the current step | A saved draft reopens on step 2 with the subject and account filled in, plus a "restored" message |
+| Handles corrupted JSON without crashing and removes it | Invalid JSON produces a friendly alert and a fresh form, and the bad entry is deleted |
+| Handles drafts with an unexpected shape | Data that fails Zod validation is treated as corrupted and removed |
+| Discards drafts saved by an older version of the form | A draft with an old version number is discarded with an explanation |
+| Lets the member discard a draft after confirming | **Discard draft** → **Yes, discard** clears storage and the form |
+| Clears the draft after a successful submission | Submitting a restored, complete draft removes it from storage |
+| Sends the member back to fix a restored draft that is incomplete | Submitting an incomplete draft jumps to the step with the problem and shows the error summary |
+| `readDraft` (unit, 4 tests) | Handles missing storage, a round trip with `writeDraft`, storage that throws (such as blocked privacy modes), and envelopes without a version |
+
+#### Vitest unit tests
+
+**[`tests/lib/transactions.test.ts`](tests/lib/transactions.test.ts): Search, filter, sort, and data integrity (12 tests)**
+
+| Group | What it proves |
+| --- | --- |
+| Transaction search (5) | Case-insensitive merchant search; amount search with or without `$`; reference number and category search; finding an unfamiliar descriptor by its possible business name; every word in the query must match |
+| Transaction filters (3) | Account + type + amount filters combine; date ranges include both ends; active filters are counted, and impossible ranges are reported |
+| Sorting (1) | Newest, oldest, highest, and lowest all order correctly |
+| Synthetic data consistency (3) | Checking's pending items add up to exactly the $300.00 balance difference; transaction IDs and references are unique; every related-transaction link points to a real record |
+
+**[`tests/lib/transaction-explanations.test.ts`](tests/lib/transaction-explanations.test.ts): Explanation engine (16 tests)**
+
+| Group | What it proves |
+| --- | --- |
+| `getExplanationKind` (10) | Real transactions are classified correctly as pending, hold (active and released), transfer (external and internal), fee, unfamiliar merchant, reversed, deposit, and posted |
+| `getTransactionExplanation` (6) | Every transaction gets all four explanation sections; every linked Help Center article exists; transfer explanations **never promise a processing time** (no "N business days" or "will arrive by"); hotel holds cite the authorized amount; released rental-car holds say "released"; maintenance fees cite the demo waiver terms and admit uncertainty ("can't confirm") |
 
 ## Linting
 

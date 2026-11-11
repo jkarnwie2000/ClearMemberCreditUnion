@@ -24,3 +24,5 @@ npm-debug.log*
 # env files
 .env*
 !.env.example
+
+.vercel
