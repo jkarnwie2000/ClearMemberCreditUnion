@@ -1,6 +1,8 @@
 # Clear Member Credit Union – Member Banking Dashboard
 
-> **Don't just display banking information. Explain it.**
+**All financial data in this project is synthetic.** See the [disclaimer](#disclaimer).
+
+**Don't just display banking information. Explain it.**
 
 A member-centered digital banking dashboard for a fictional credit union. Members can search and filter their activity, and every transaction comes with a plain-language explanation. The app also includes a searchable Help Center and an accessible four-step support request that saves drafts automatically.
 
@@ -8,11 +10,26 @@ A member-centered digital banking dashboard for a fictional credit union. Member
 
 ![Clear Member Credit Union Screenshot](docs/screenshots/overview-desktop.png)
 
+## 🛠️ Tech Stack
+
+* Next.js 16: App Router, React 19
+* TypeScript: strict typing throughout
+* Tailwind CSS v4: accessible, high-contrast design tokens
+* React Hook Form + Zod: validated multi-step forms
+* Vitest: fast unit testing
+* React Testing Library: user-focused, accessible component tests
+* Lucide React: consistent icon set
+* localStorage: versioned, debounced draft saving
+* ESLint: Next.js and TypeScript rules
+* GitHub Actions: CI for lint, tests, build
+* Vercel: automated production deployment
+* Lighthouse + axe-core: performance and accessibility audits
+
 
 🔗 **Live Demo:** [View Live Website](https://clearmember-credit-union.vercel.app)
 
 
-**All financial data in this project is synthetic.** See the [disclaimer](#disclaimer).
+
 
 ---
 
