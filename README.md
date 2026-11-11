@@ -45,7 +45,7 @@ A member-centered digital banking dashboard for a fictional credit union. Member
 * 🚀 CI/CD: GitHub Actions tests every push, then deploys to Vercel
 * 🧪 100% synthetic data: no real accounts or banking connections
 
-## Clear Member Credit Union
+## Clear Member Credit Union Dashboard
 
 🔗 **Live Demo:** [View Live Website](https://clearmember-credit-union.vercel.app)
 
