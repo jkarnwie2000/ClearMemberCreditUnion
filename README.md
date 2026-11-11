@@ -11,7 +11,6 @@ A member-centered digital banking dashboard for a fictional credit union. Member
 ![Clear Member Credit Union Screenshot](docs/screenshots/overview-desktop.png)
 
 
-
 ## 🛠️ Tech Stack
 
 * Next.js 16: App Router, React 19
@@ -28,10 +27,6 @@ A member-centered digital banking dashboard for a fictional credit union. Member
 * Lighthouse + axe-core: performance and accessibility audits
 
 ### 🚀 Key Features
-
- Written for: visitors to your GitHub profile, as a short feature list under the pinned project.
-
-**Key features**
 
 - 💡 **Plain-language transaction explanations:** what happened, why, and what to do next
 - ⚖️ **Balance breakdown:** shows exactly why available and current balances differ
@@ -56,8 +51,7 @@ A member-centered digital banking dashboard for a fictional credit union. Member
 
 A Next.js banking dashboard that explains every transaction in plain language.
 
-
----
+## Summarist Book Summary Run Instructions
 
 ## Table of contents
 
