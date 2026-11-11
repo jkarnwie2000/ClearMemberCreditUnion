@@ -2,7 +2,7 @@
 
 **All financial data in this project are synthetic.** See the [disclaimer](#disclaimer).
 
-## Don't just display banking information. Explain it.
+## Do not just display banking information. Explain it.
 
 A member-centered digital banking dashboard for a fictional credit union. Members can search and filter their activity, and every transaction comes with a plain-language explanation. The app also includes a searchable Help Center and an accessible four-step support request that saves drafts automatically.
 
